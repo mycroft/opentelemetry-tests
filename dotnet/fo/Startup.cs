@@ -48,11 +48,8 @@ namespace fo
                         opts.AgentHost = "localhost";
                         opts.AgentPort = 6831;
                     })
-
-//                    .SetSampler(new AlwaysOnSampler())
-//                    .AddSource("Testaroo")
-//                    .AddHttpClientInstrumentation()
-//                    .AddJaegerExporter()
+                    // Define a sampler
+                    .SetSampler(new AlwaysOnSampler())
             );
 
         }

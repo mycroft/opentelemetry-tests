@@ -26,9 +26,6 @@ namespace bo.Controllers
             {
                 props.Headers ??= new Dictionary<string, object>();
                 props.Headers[key] = value;
-
-                Console.WriteLine(key);
-                Console.WriteLine(value);
             }
             catch (Exception)
             {

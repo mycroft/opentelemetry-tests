@@ -25,7 +25,7 @@ namespace fo.Controllers
 
                 activity_foo.AddBaggage("client_port", remoteIpAddress + ":" + remoteIpPort);
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:6000/reverse?name=patrick");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:6000/reverse?name=" + name);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 var response_body = new StreamReader(response.GetResponseStream()).ReadToEnd();
