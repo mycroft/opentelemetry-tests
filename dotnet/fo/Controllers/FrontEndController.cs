@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace fo.Controllers
 {
@@ -11,7 +12,13 @@ namespace fo.Controllers
     [Route("/")]
     public class FrontEndController : ControllerBase
     {
+        private readonly ILogger _logger;
         private static readonly ActivitySource Activity = new("Tracing", "1.0.0");
+
+        public FrontEndController(ILogger<FrontEndController> logger)
+        {
+            _logger = logger;
+        }
 
         [HttpGet("hello")]
         public string Get(string name = "world")
@@ -20,6 +27,7 @@ namespace fo.Controllers
             var remoteIpPort = HttpContext.Connection.RemotePort;
 
             using (var activity_foo = Activity.StartActivity("foo", ActivityKind.Producer)) {
+                _logger.LogInformation($"Hello form the span! My name is {name}");
                 activity_foo?.SetTag("client_port", remoteIpAddress + ":" + remoteIpPort);
                 activity_foo?.AddEvent(new ActivityEvent("Starting request to backend."));
 

@@ -42,7 +42,7 @@ namespace fo
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddSource("Tracing")
-                    .AddConsoleExporter()
+                    // .AddConsoleExporter()
                     .AddJaegerExporter(opts => {
                         opts.ExportProcessorType = ExportProcessorType.Simple;
                         opts.AgentHost = "localhost";
