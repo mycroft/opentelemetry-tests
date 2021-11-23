@@ -80,9 +80,6 @@ namespace bo.Controllers
                     activity?.SetTag("messaging.destination_kind", "queue");
                     activity?.SetTag("messaging.rabbitmq.queue", "sample");
 
-                    Console.WriteLine(activity.Baggage);
-                    Console.WriteLine(Baggage.Current);
-
                     Baggage currentBaggage = Baggage.Current;
 
                     foreach (var (key, value) in Activity.Current?.Baggage)
