@@ -4,6 +4,9 @@ using System.IO;
 using System.Net;
 
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
 namespace fo.Controllers
@@ -13,11 +16,13 @@ namespace fo.Controllers
     public class FrontEndController : ControllerBase
     {
         private readonly ILogger _logger;
+        private readonly IMetricReporter _reporter;
         private static readonly ActivitySource Activity = new("Tracing", "1.0.0");
 
-        public FrontEndController(ILogger<FrontEndController> logger)
+        public FrontEndController(ILogger<FrontEndController> logger, IMetricReporter reporter)
         {
             _logger = logger;
+            _reporter = reporter;
         }
 
         [HttpGet("hello")]
@@ -25,6 +30,9 @@ namespace fo.Controllers
         {
             var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
             var remoteIpPort = HttpContext.Connection.RemotePort;
+
+            _reporter.GetCounter().Add(1);
+            _reporter.GetCounter().Add(1, new KeyValuePair<string, object>("name", name));
 
             using (var activity_foo = Activity.StartActivity("foo", ActivityKind.Producer)) {
                 _logger.LogInformation($"Hello form the span! My name is {name}");

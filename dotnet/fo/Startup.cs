@@ -16,6 +16,8 @@ using OpenTelemetry;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 
+using OpenTelemetry.Metrics;
+
 namespace fo
 {
     public class Startup
@@ -30,7 +32,6 @@ namespace fo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -51,7 +52,14 @@ namespace fo
                     // Define a sampler
                     .SetSampler(new AlwaysOnSampler())
             );
+            services.AddOpenTelemetryMetrics(builder =>
+            {
+                builder.AddAspNetCoreInstrumentation();
+                builder.AddMeter("Metrics"); // same name than in the controller
+                builder.AddPrometheusExporter();
+            });
 
+            services.AddSingleton<IMetricReporter, MetricReporter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +77,9 @@ namespace fo
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Enable Prometheus scraping endpoint
+            app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
             app.UseEndpoints(endpoints =>
             {
