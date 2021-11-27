@@ -39,7 +39,7 @@ namespace fo.Controllers
                 activity_foo?.SetTag("client_port", remoteIpAddress + ":" + remoteIpPort);
                 activity_foo?.AddEvent(new ActivityEvent("Starting request to backend."));
 
-                activity_foo.AddBaggage("client_port", remoteIpAddress + ":" + remoteIpPort);
+                activity_foo?.AddBaggage("client_port", remoteIpAddress + ":" + remoteIpPort);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:6000/reverse?name=" + name);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();

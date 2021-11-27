@@ -88,12 +88,15 @@ namespace bo.Controllers
                     }
 
                     var props = channel.CreateBasicProperties();
-                    Propagator.Inject(
-                        new PropagationContext(
-                            activity.Context,
-                            Baggage.Current),
-                        props,
-                        InjectContextIntoHeader);
+
+                    if (activity != null) {
+                        Propagator.Inject(
+                            new PropagationContext(
+                                activity.Context,
+                                Baggage.Current),
+                            props,
+                            InjectContextIntoHeader);
+                    }
 
                     channel.QueueDeclare(queue: "sample",
                         durable: false,
